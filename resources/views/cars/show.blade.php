@@ -24,6 +24,7 @@
                 </p>
 
                 <div class="inline-block items-center">
+
                     <table class="table-auto">
                         <tr class="bg-blue-100">
                             <th class="w-1/3 p-2 border-2 border-gray-700">
@@ -61,11 +62,20 @@
                             </p>
                         @endforelse
                     </table>
+
+                    <p class="text-left pt-2">
+                        Product types:
+                        @forelse ($car->products as $product)
+                            {{ $product->name }}@if(!$loop->last),@endif
+                        @empty
+                        <p>
+                            No car product description
+                        </p>
+                        @endforelse
+                    </p>
                 </div>
                 <hr class="mt-4 mb-8">
             </div>
         </div>
     </div>
-
-
 @endsection
