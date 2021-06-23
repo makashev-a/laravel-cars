@@ -30,4 +30,22 @@ class Car extends Model
     use HasFactory;
 
     protected $fillable = ['name', 'founded', 'description'];
+
+    protected $hidden = ['updated_at'];
+
+    // A car has many car models
+    public function carModels()
+    {
+        return $this->hasMany(CarModel::class);
+    }
+
+    public function engines()
+    {
+        return $this->hasManyThrough(Engine::class, CarModel::class, 'car_id', 'model_id');
+    }
+
+    public function carProductionDate()
+    {
+        return $this->hasOneThrough(CarProductionDate::class, CarModel::class, 'car_id', 'model_id');
+    }
 }

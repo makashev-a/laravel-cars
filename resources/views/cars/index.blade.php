@@ -29,17 +29,17 @@
                         <form action="/cars/{{ $car->id }}" class="pt-3" method="POST">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="border-b-2 pb-2 border-dotted italic text-xl text-red-500">
-                                Delete &rarr;
-                            </button>
+                            <button type="submit" class="border-b-2 pb-2 border-dotted italic text-xl text-red-500">Delete &rarr;</button>
                         </form>
                     </div>
                     <span class="uppercase text-blue-500 font-bold text-sm italic">
                     Founded: {{ $car->founded }}
                 </span>
 
-                    <h2 class="text-gray-700 text-6xl">
-                        {{ $car->name }}
+                    <h2 class="text-gray-700 text-6xl hover:text-gray-500">
+                        <a href="/cars/{{ $car->id }}">
+                            {{ $car->name }}
+                        </a>
                     </h2>
 
                     <p class="text-lg text-gray-700 py-6">
