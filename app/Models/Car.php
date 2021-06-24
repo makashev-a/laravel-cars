@@ -29,7 +29,7 @@ class Car extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'founded', 'description'];
+    protected $fillable = ['name', 'founded', 'description', 'image_path', 'user_id'];
 
     protected $hidden = ['updated_at'];
 
@@ -48,7 +48,7 @@ class Car extends Model
     // A car has one production date through car models
     public function carProductionDate()
     {
-        return $this->hasOneThrough(CarProductionDate::class, CarModel::class, 'car_id', 'model_id');
+        return $this->hasManyThrough(CarProductionDate::class, CarModel::class, 'car_id', 'model_id');
     }
 
     // A car belongs to many products

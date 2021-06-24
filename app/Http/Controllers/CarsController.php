@@ -2,11 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreateValidationRequest;
 use App\Models\Car;
 use Illuminate\Http\Request;
 
 class CarsController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth', ['except' => ['index', 'show']]);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -34,21 +40,23 @@ class CarsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param CreateValidationRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CreateValidationRequest $request)
     {
-//        $car = new Car;
-//        $car->name = $request->input('name');
-//        $car->founded = $request->input('founded');
-//        $car->description = $request->input('description');
-//        $car->save();
+        $request->validated();
+
+        $newImageName = time() . '-' . $request->name . '.' . $request->image->extension();
+
+        $request->image->move(public_path('images'), $newImageName);
 
         $car = Car::create([
             'name' => $request->input('name'),
             'founded' => $request->input('founded'),
-            'description' => $request->input('description')
+            'description' => $request->input('description'),
+            'image_path' => $newImageName,
+            'user_id' => auth()->user()->id
         ]);
 
         return redirect('/cars');
@@ -83,17 +91,25 @@ class CarsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param CreateValidationRequest $request
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(CreateValidationRequest $request, $id)
     {
+        $request->validated();
+
+        $newImageName = time() . '-' . $request->name . '.' . $request->image->extension();
+
+        $request->image->move(public_path('images'), $newImageName);
+
         $car = Car::where('id', $id)
             ->update([
                 'name' => $request->input('name'),
                 'founded' => $request->input('founded'),
-                'description' => $request->input('description')
+                'description' => $request->input('description'),
+                'image_path' => $newImageName,
+                'user_id' => auth()->user()->id
             ]);
 
         return redirect('/cars');

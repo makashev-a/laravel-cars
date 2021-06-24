@@ -6,6 +6,10 @@
             <h1 class="text-6xl uppercase bold">
                 {{ $car->name }}
             </h1>
+            <img
+                src="{{ asset('images/' . $car->image_path) }}"
+                alt=""
+                class="w-8/12 block mx-auto my-3">
         </div>
 
         <div class="py-10 text-center">
@@ -25,7 +29,7 @@
 
                 <div class="inline-block items-center">
 
-                    <table class="table-auto">
+                    <table class="table-auto mx-auto">
                         <tr class="bg-blue-100">
                             <th class="w-1/3 p-2 border-2 border-gray-700">
                                 Model
@@ -53,11 +57,15 @@
                                 </td>
 
                                 <td class="p-2 border-2 border-gray-700">
-                                    {{ date('d-m-Y', strtotime($car->carProductionDate->created_at)) }}
+                                    @foreach($car->carProductionDate as $date)
+                                        @if ($model->id == $date->model_id)
+                                            {{ date('d-m-Y', strtotime($date->created_at)) }}
+                                        @endif
+                                    @endforeach
                                 </td>
                             </tr>
                         @empty
-                            <p>
+                            <p class="mb-2">
                                 No car models found
                             </p>
                         @endforelse
@@ -67,12 +75,10 @@
                         Product types:
                         @forelse ($car->products as $product)
                             {{ $product->name }}@if(!$loop->last),@endif
-                        @empty
-                        <p>
-                            No car product description
-                        </p>
+                    @empty
+                        No car product description
                         @endforelse
-                    </p>
+                        </p>
                 </div>
                 <hr class="mt-4 mb-8">
             </div>
